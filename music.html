@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Music Player</title>
+
+    <style>
+       body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #1e1e1e, #000);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Main Card */
+.music-player {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    padding: 30px;
+    border-radius: 20px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0,0,0,0.6);
+}
+
+/* Title */
+#title {
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+/* Image */
+#img img {
+    width: 200px;
+    height: 200px;
+    border-radius: 15px;
+    object-fit: cover;
+    box-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
+
+/* Buttons */
+button {
+    background: #1db954;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    margin: 8px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #17a74a;
+    transform: scale(1.1);
+}
+
+/* Song List */
+#songs {
+    margin-top: 15px;
+    max-height: 120px;
+    overflow-y: auto;
+    text-align: left;
+}
+
+#songs div {
+    padding: 8px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+#songs div:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* Active Song */
+.active {
+    background: #1db954 !important;
+}
+    </style>
+</head>
+
+<body>
+
+    <div class="music-player">
+        <h1>🎵 Music Player</h1>
+        <p id="title">Song Name</p>
+        <div id="img"></div>
+
+        <audio id="audio"></audio>
+        <div  id="songs">
+
+        </div>
+
+        <div>
+            <button onclick="prevSong()">⏮ Prev</button>
+            <button onclick="playPause()" ><p>▶<span id="playPause">play</span></p></button>
+            <button onclick="nextSong()">⏭ Next</button>
+
+        </div>
+    </div>
+
+<script>
+
+const songs = [
+    {
+        name: "man of steel",
+        file: "man_of_steel.mp3",
+        Image:"https://tinyurl.com/y72x2uxy"
+    },
+    {
+        name: "Inception",
+        file: "time.mp3",
+        Image:"https://tinyurl.com/5wh7drfb",
+
+    },
+    {
+        name: "Interstellar",
+        file: "interstellar.mp3",
+        Image:"https://tinyurl.com/2kynnfzh"
+    }
+];
+
+let index = 0;
+let isPlaying = false;
+
+const audio = document.getElementById("audio");
+const title = document.getElementById("title");
+const image=document.getElementById('img');
+
+// Load first song
+loadSong(index);
+
+function loadSong(i) {
+    audio.src = songs[i].file;
+    title.innerText = songs[i].name;
+    image.innerHTML=`<img src="${songs[i].Image}" width="200px">`
+    audio.addEventListener("ended", () => {
+    audio.play();
+    
+});
+}
+
+// Play / Pause
+function playPause() {
+    if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+        document.getElementById("playPause").textContent="Pause";
+
+    } else {
+        audio.play();
+        isPlaying = true;
+        document.getElementById("playPause").textContent="Play";
+
+    }
+}
+
+// Next
+function nextSong() {
+    index = (index + 1) % songs.length;
+    loadSong(index);
+    audio.play();
+    isPlaying = true;
+}
+
+// Previous
+function prevSong() {
+    index = (index - 1 + songs.length) % songs.length;
+    loadSong(index);
+    audio.play();
+    isPlaying = true;
+}
+function displaySongs() {
+    const songList = document.getElementById("songs");
+
+    songs.forEach((song, i) => {
+        const songItem = document.createElement("div");
+
+        songItem.innerText = song.name;
+        songItem.style.cursor = "pointer";
+        songItem.style.margin = "5px";
+
+        // When clicked → play that song
+        songItem.onclick = () => {
+            index = i;
+            loadSong(index);
+            audio.play();
+            isPlaying = true;
+        };
+
+        songList.appendChild(songItem);
+    });
+}
+displaySongs();
+songItem.onclick = () => {
+    index = i;
+    loadSong(index);
+    audio.play();
+}
+</script>
+
+</body>
+</html>
